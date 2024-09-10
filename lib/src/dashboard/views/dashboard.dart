@@ -1,0 +1,78 @@
+import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:stockquote/core/res/colors/stock_colors.dart';
+import 'package:stockquote/core/res/media/stock_media.dart';
+import 'package:stockquote/core/res/text/stock_text.dart';
+import 'package:stockquote/utils/debouncer.dart';
+import 'package:stockquote/utils/network_utils.dart';
+import 'package:stockquote/utils/toast_utils.dart';
+import 'package:toastification/toastification.dart';
+
+class Dashboard extends StatefulWidget {
+  const Dashboard({super.key});
+
+  static const path = '/dashboard';
+
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  TextEditingController searchController = TextEditingController();
+  final _debouncer = Debouncer(milliseconds: 500);
+
+  @override
+  void initState() {
+    super.initState();
+    _checkInternetConnection();
+  }
+
+  Future<void> _checkInternetConnection() async {
+    bool hasConnection = await InternetUtil.hasInternetConnection();
+    if(!hasConnection){
+      notify("No Internet", ToastificationType.error);
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: StockColors.primaryColor,
+        child: const Icon(Iconsax.bookmark_copy),
+        onPressed: () {},
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              TextFormField(
+                controller: searchController,
+                decoration: const InputDecoration(
+                  labelText: "Search"
+                ),
+                onTapOutside: (event) => FocusScope.of(context).requestFocus(FocusNode()),
+                onChanged: (value) {
+                  _debouncer.run(() => debugPrint(value));
+                },
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(StockMedia.searchPlaceholder),
+                    const Text(StockText.searchPlaceholderText,),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
