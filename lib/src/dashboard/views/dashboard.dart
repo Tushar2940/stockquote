@@ -4,6 +4,7 @@ import 'package:stockquote/core/res/colors/stock_colors.dart';
 import 'package:stockquote/core/res/media/stock_media.dart';
 import 'package:stockquote/core/res/text/stock_text.dart';
 import 'package:stockquote/src/dashboard/bloc/search_stock_bloc.dart';
+import 'package:stockquote/src/dashboard/views/searched_list_widget.dart';
 import 'package:stockquote/utils/debouncer.dart';
 import 'package:stockquote/utils/network_utils.dart';
 import 'package:stockquote/utils/toast_utils.dart';
@@ -68,6 +69,12 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 BlocBuilder<SearchStockBloc, SearchStockState>(
                   builder: (context, state) {
+                    if(state is SearchedStock){
+                      return SearchedListWidget(list: state.stockList);
+                    }
+                    if(state is SearchedError){
+                      notify(state.error, ToastificationType.error);
+                    }
                     return Expanded(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,

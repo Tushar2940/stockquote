@@ -10,8 +10,18 @@ class SearchStockInitial extends SearchStockState {}
 
 class SearchingStock extends SearchStockState {}
 
-class SearchedStock extends SearchStockState {}
+class SearchedStock extends SearchStockState {
+  const SearchedStock(this.stockList);
+  final List<StockSearchModel> stockList;
+  @override
+  List<Object> get props => [stockList];
+}
 
-class SearchedError extends SearchStockState {}
+class SearchedError extends SearchStockState {
+  const SearchedError(this.error);
+  final String error;
+  @override
+  List<Object> get props => [error];
+}
 
 
