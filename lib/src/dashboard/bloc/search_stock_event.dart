@@ -4,7 +4,6 @@ abstract class SearchStockEvent extends Equatable {
   const SearchStockEvent();
 
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 

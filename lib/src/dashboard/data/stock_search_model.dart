@@ -1,48 +1,38 @@
 class StockSearchModel {
-  String? symbol;
-  String? name;
-  String? type;
-  String? region;
-  String? marketOpen;
-  String? marketClose;
-  String? timezone;
-  String? currency;
-  String? matchScore;
+  final String description;
+  final String displaySymbol;
+  final String symbol;
+  final String type;
 
-  StockSearchModel(
-      {this.symbol,
-        this.name,
-        this.type,
-        this.region,
-        this.marketOpen,
-        this.marketClose,
-        this.timezone,
-        this.currency,
-        this.matchScore});
+  StockSearchModel({
+    required this.description,
+    required this.displaySymbol,
+    required this.symbol,
+    required this.type,
+  });
 
-  StockSearchModel.fromJson(Map<String, dynamic> json) {
-    symbol = json['1. symbol'];
-    name = json['2. name'];
-    type = json['3. type'];
-    region = json['4. region'];
-    marketOpen = json['5. marketOpen'];
-    marketClose = json['6. marketClose'];
-    timezone = json['7. timezone'];
-    currency = json['8. currency'];
-    matchScore = json['9. matchScore'];
+  // Factory method to create a StockResultModel from a JSON object
+  factory StockSearchModel.fromJson(Map<String, dynamic> json) {
+    return StockSearchModel(
+      description: json['description'] ?? '',
+      displaySymbol: json['displaySymbol'] ?? '',
+      symbol: json['symbol'] ?? '',
+      type: json['type'] ?? '',
+    );
   }
 
+  // Method to convert a StockResultModel instance to JSON format
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['1. symbol'] = Symbol;
-    data['2. name'] = name;
-    data['3. type'] = Type;
-    data['4. region'] = region;
-    data['5. marketOpen'] = marketOpen;
-    data['6. marketClose'] = marketClose;
-    data['7. timezone'] = timezone;
-    data['8. currency'] = currency;
-    data['9. matchScore'] = matchScore;
-    return data;
+    return {
+      'description': description,
+      'displaySymbol': displaySymbol,
+      'symbol': symbol,
+      'type': type,
+    };
+  }
+
+  // Static method to parse a list of JSON objects into a list of StockResultModel
+  static List<StockSearchModel> fromJsonList(List<dynamic> jsonList) {
+    return jsonList.map((json) => StockSearchModel.fromJson(json)).toList();
   }
 }

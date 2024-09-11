@@ -14,12 +14,16 @@ class SearchStockBloc extends Bloc<SearchStockEvent, SearchStockState> {
   SearchStockBloc() : super(SearchStockInitial()) {
     on<OnChangedSearchEvent>((event, emit) async {
       emit(SearchingStock());
-      try{
-        var result = await dashboardRepository.searchStock(event.query);
-        debugPrint(result.length.toString());
-        emit(SearchedStock(result));
-      }catch(e){
-        emit(SearchedError(e.toString()));
+      if(event.query.isEmpty){
+        emit(SearchStockInitial());
+      }else {
+        try {
+          var result = await dashboardRepository.searchStock(event.query);
+          debugPrint(result.length.toString());
+          emit(SearchedStock(result));
+        } catch (e) {
+          emit(SearchedError(e.toString()));
+        }
       }
     });
   }
