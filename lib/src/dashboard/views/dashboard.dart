@@ -3,10 +3,12 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:stockquote/core/res/colors/stock_colors.dart';
 import 'package:stockquote/core/res/media/stock_media.dart';
 import 'package:stockquote/core/res/text/stock_text.dart';
+import 'package:stockquote/src/dashboard/bloc/search_stock_bloc.dart';
 import 'package:stockquote/utils/debouncer.dart';
 import 'package:stockquote/utils/network_utils.dart';
 import 'package:stockquote/utils/toast_utils.dart';
 import 'package:toastification/toastification.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -20,6 +22,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   TextEditingController searchController = TextEditingController();
   final _debouncer = Debouncer(milliseconds: 500);
+  SearchStockBloc searchStockBloc = SearchStockBloc();
 
   @override
   void initState() {
@@ -29,7 +32,7 @@ class _DashboardState extends State<Dashboard> {
 
   Future<void> _checkInternetConnection() async {
     bool hasConnection = await InternetUtil.hasInternetConnection();
-    if(!hasConnection){
+    if (!hasConnection) {
       notify("No Internet", ToastificationType.error);
     }
   }
@@ -37,39 +40,48 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: StockColors.primaryColor,
-        child: const Icon(Iconsax.bookmark_copy),
-        onPressed: () {},
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              TextFormField(
-                controller: searchController,
-                decoration: const InputDecoration(
-                  labelText: "Search"
+    return BlocProvider(
+      create: (context) => searchStockBloc,
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: StockColors.primaryColor,
+          child: const Icon(Iconsax.bookmark_copy, color: Colors.white,),
+          onPressed: () {},
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                TextFormField(
+                  controller: searchController,
+                  decoration: const InputDecoration(
+                      labelText: "Search"
+                  ),
+                  onTapOutside: (event) =>
+                      FocusScope.of(context).requestFocus(FocusNode()),
+                  onChanged: (value) {
+                    _debouncer.run(() =>
+                        searchStockBloc.add(OnChangedSearchEvent(value)));
+                  },
                 ),
-                onTapOutside: (event) => FocusScope.of(context).requestFocus(FocusNode()),
-                onChanged: (value) {
-                  _debouncer.run(() => debugPrint(value));
-                },
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(StockMedia.searchPlaceholder),
-                    const Text(StockText.searchPlaceholderText,),
-                  ],
+                BlocBuilder<SearchStockBloc, SearchStockState>(
+                  builder: (context, state) {
+                    return Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(StockMedia.searchPlaceholder),
+                          const Text(StockText.searchPlaceholderText,),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
