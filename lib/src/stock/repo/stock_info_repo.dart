@@ -5,7 +5,7 @@ import 'package:stockquote/src/stock/data/stock_quote_model.dart';
 
 class StockInfoRepository{
   Future<StockQuoteModel> quote(String symbol) async {
-    debugPrint("called");
+    debugPrint("https://finnhub.io/api/v1/quote?symbol=$symbol&token=crgra09r01qrbc70v6bgcrgra09r01qrbc70v6c0");
     try {
       final response = await http.get(
         Uri.parse(

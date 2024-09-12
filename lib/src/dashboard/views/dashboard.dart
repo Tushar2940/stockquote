@@ -4,6 +4,8 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:stockquote/core/res/colors/stock_colors.dart';
 import 'package:stockquote/core/res/media/stock_media.dart';
 import 'package:stockquote/core/res/text/stock_text.dart';
+import 'package:stockquote/core/widgets/loader_widget.dart';
+import 'package:stockquote/core/widgets/search_placeholder.dart';
 import 'package:stockquote/src/dashboard/bloc/search_stock_bloc.dart';
 import 'package:stockquote/src/dashboard/views/searched_list_widget.dart';
 import 'package:stockquote/src/stock/views/stock_info_screen.dart';
@@ -47,21 +49,24 @@ class _DashboardState extends State<Dashboard> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => searchStockBloc,
       child: BlocListener<SearchStockBloc, SearchStockState>(
         listener: (context, state) {
-          if(state is SearchedError) {
+          if (state is SearchedError) {
+            FocusScope.of(context).requestFocus(FocusNode());
             notify(state.error, ToastificationType.error);
           }
         },
         child: Scaffold(
           floatingActionButton: FloatingActionButton(
             backgroundColor: StockColors.primaryColor,
-            child: const Icon(Iconsax.bookmark_copy, color: Colors.white,),
+            child: const Icon(
+              Iconsax.bookmark_copy,
+              color: Colors.white,
+            ),
             onPressed: () {
               context.push(WatchlistScreen.path);
             },
@@ -74,9 +79,7 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   TextFormField(
                     controller: searchController,
-                    decoration: const InputDecoration(
-                        labelText: "Search"
-                    ),
+                    decoration: const InputDecoration(labelText: "Search"),
                     onTapOutside: (event) =>
                         FocusScope.of(context).requestFocus(FocusNode()),
                     onChanged: (value) {
@@ -87,22 +90,20 @@ class _DashboardState extends State<Dashboard> {
                   BlocBuilder<SearchStockBloc, SearchStockState>(
                     builder: (context, state) {
                       if (state is SearchedStock) {
-                        return SearchedListWidget(list: state.stockList);
+                        if(state.stockList.isEmpty){
+                          return Expanded(
+                            child: Center(
+                              child: Text("Invalid Symbol",style: Theme.of(context).textTheme.headlineLarge,),
+                            ),
+                          );
+                        }else {
+                          return SearchedListWidget(list: state.stockList);
+                        }
                       }
                       if (state is SearchingStock) {
-                        return const Expanded(child: Center(
-                          child: CircularProgressIndicator(),),);
+                        return const Expanded(child: LoaderWidget());
                       }
-                      return Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(StockMedia.searchPlaceholder),
-                            const Text(StockText.searchPlaceholderText,),
-                          ],
-                        ),
-                      );
+                      return const SearchPlaceHolder();
                     },
                   ),
                 ],

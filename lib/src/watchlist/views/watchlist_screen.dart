@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stockquote/src/stock/views/stock_info_screen.dart';
 import 'package:stockquote/src/watchlist/bloc/watch_list_bloc.dart';
 import 'package:stockquote/src/watchlist/views/watchlist_card.dart';
 
@@ -24,7 +26,11 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
               return ListView.builder(
                 itemCount: state.watchList.length,
                 itemBuilder: (context, index) {
-                  return WatchListCard(watchListModel: state.watchList[index],index: index,);
+                  return GestureDetector(
+                      onTap: () {
+                        context.push("${StockInfoScreen.path}?symbol=${state.watchList[index].symbol}&name=${state.watchList[index].name}");
+                      },
+                      child: WatchListCard(watchListModel: state.watchList[index],index: index,));
                 },
               );
             }

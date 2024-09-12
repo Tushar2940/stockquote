@@ -1,11 +1,11 @@
 class StockQuoteModel {
-  final double currentPrice;
-  final double change;
-  final double percentChange;
-  final double highPrice;
-  final double lowPrice;
-  final double openPrice;
-  final double previousClosePrice;
+  final num currentPrice;
+  final num change;
+  final num percentChange;
+  final num highPrice;
+  final num lowPrice;
+  final num openPrice;
+  final num previousClosePrice;
   final int timestamp;
 
   StockQuoteModel({
@@ -22,13 +22,13 @@ class StockQuoteModel {
 
   factory StockQuoteModel.fromJson(Map<String, dynamic> json) {
     return StockQuoteModel(
-      currentPrice: json['c'].toDouble(),
-      change: json['d'].toDouble(),
-      percentChange: json['dp'].toDouble(),
-      highPrice: json['h'].toDouble(),
-      lowPrice: json['l'].toDouble(),
-      openPrice: json['o'].toDouble(),
-      previousClosePrice: json['pc'].toDouble(),
+      currentPrice: json['c'] ?? 0,
+      change: json['d'] ?? 0,
+      percentChange: json['dp'] ?? 0,
+      highPrice: json['h'] ?? 0,
+      lowPrice: json['l'] ?? 0,
+      openPrice: json['o'] ?? 0,
+      previousClosePrice: json['pc'] ?? 0,
       timestamp: json['t'],
     );
   }
