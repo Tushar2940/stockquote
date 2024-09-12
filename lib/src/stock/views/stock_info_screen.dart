@@ -76,17 +76,19 @@ class _StockInfoScreenState extends State<StockInfoScreen> {
         },
         child: Scaffold(
           appBar: AppBar(),
-          body: BlocBuilder<StockInfoBloc, StockInfoState>(
-            builder: (context, state) {
-              if (state is StockInfoLoading) {
-                return const LoaderWidget();
-              }
-              if (state is StockInfoLoaded) {
-                return StockDetails(name: widget.name,symbol: widget.symbol,stockQuote: state.stockQuote,);
-              } else {
-                return const SizedBox();
-              }
-            },
+          body: SafeArea(
+            child: BlocBuilder<StockInfoBloc, StockInfoState>(
+              builder: (context, state) {
+                if (state is StockInfoLoading) {
+                  return const LoaderWidget();
+                }
+                if (state is StockInfoLoaded) {
+                  return StockDetails(name: widget.name,symbol: widget.symbol,stockQuote: state.stockQuote,);
+                } else {
+                  return const SizedBox();
+                }
+              },
+            ),
           ),
         ),
       ),

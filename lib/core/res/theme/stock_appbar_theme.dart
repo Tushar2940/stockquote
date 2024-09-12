@@ -23,7 +23,7 @@ class StockAppbarTheme{
     backgroundColor: StockColors.scaffoldBgColorDark,
     foregroundColor: StockColors.white,
     surfaceTintColor: Colors.transparent,
-    iconTheme: const IconThemeData(color: Colors.black, size: 24),
+    iconTheme: const IconThemeData(color: Colors.white, size: 24),
     actionsIconTheme: const IconThemeData(color: Colors.white, size: 24),
     titleTextStyle: const TextStyle(
         fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.white),

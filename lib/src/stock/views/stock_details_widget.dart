@@ -35,7 +35,7 @@ class StockDetails extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(symbol,style: Theme.of(context).textTheme.headlineMedium,),
-                  Text(name,style: Theme.of(context).textTheme.labelSmall,),
+                  Text(name,style: Theme.of(context).textTheme.labelMedium,),
                   Text("${stockQuote.currentPrice} (${stockQuote.percentChange.toStringAsFixed(2)} %)",style: Theme.of(context).textTheme.bodyLarge,),
                 ],
               ),

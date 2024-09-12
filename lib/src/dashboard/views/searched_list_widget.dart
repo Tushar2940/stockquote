@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:stockquote/core/res/colors/stock_colors.dart';
 import 'package:stockquote/src/dashboard/data/stock_search_model.dart';
 import 'package:stockquote/src/stock/views/stock_info_screen.dart';
 
@@ -10,6 +11,8 @@ class SearchedListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    debugPrint(isDarkMode.toString());
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
@@ -27,7 +30,7 @@ class SearchedListWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(list[index].symbol ?? '',style: Theme.of(context).textTheme.bodyLarge,),
-                      const Icon(Iconsax.arrow_right_1_copy),
+                      Icon(Iconsax.arrow_right_1_copy,color: StockColors.primaryColor,),
                     ],
                   ),
                   Text(list[index].description ?? '',style: Theme.of(context).textTheme.bodyLarge,),
